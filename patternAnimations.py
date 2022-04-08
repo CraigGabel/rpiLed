@@ -25,6 +25,27 @@ class Template(BasePattern):
     def run(self):
         pass
 
+class Testing(BasePattern):
+    def __init__(self, strip = None, update = False):
+        super().__init__(strip, update)
+
+        self.everyOther = 0
+        self.color1 = Color(255, 0, 0)
+        self.color2 = Color(0, 255, 0)
+
+        for i in range(len(self.triangleNodes)):
+            self.triangleNodes[i].mode = triangleAnimations.Phaser(colorStart = self.color1 if self.everyOther == 0 else self.color2, colorEnd = self.color2 if self.everyOther == 0 else self.color1, steps = 50, updateRate = 20)
+    
+    def run(self):
+        for i in range(len(self.triangleNodes)):
+            result = self.triangleNodes[i].mode.run()
+            if (len(result.ledsChanged) > 0):
+                self.updateStrip(i, result)
+            if (result.cycleEnd):
+                if (i == 0):
+                        self.everyOther = 1 if self.everyOther == 0 else 0
+                self.triangleNodes[i].mode = triangleAnimations.Phaser(colorStart = self.color1 if self.everyOther == 0 else self.color2, colorEnd = self.color2 if self.everyOther == 0 else self.color1, steps = 50, updateRate = 20)
+
 # one triangle phases between numerous colors
 # at a random time, it stops phasing and then all triangles, in order, turn to the current randomized color
 # then the process repeats
@@ -35,7 +56,7 @@ class RandomizingWipe(BasePattern):
         self.colorStart = colorStart
         self.stages = ["init_background", "randomizing", "wiping"]
         self.patternStage = 0
-        self.wipingIndex = 0
+        self.activeIndex = 0
         self.randomizerStartColor = colorStart
         self.randomizerEndColor = Color(255, 0, 0)
 
@@ -47,7 +68,7 @@ class RandomizingWipe(BasePattern):
                 self.updateStrip(i, result)
         
         self.patternStage = 1
-        self.triangleNodes[0].mode = self.getMode(self.stages[self.patternStage])
+        self.triangleNodes[self.activeIndex].mode = self.getMode(self.stages[self.patternStage])
 
     def getMode(self, stage = None):
         returnValue = None
@@ -63,6 +84,7 @@ class RandomizingWipe(BasePattern):
         if (stage == self.stages[0]):
             returnValue = triangleAnimations.Solid(color=self.colorStart, updateRate=backgroundUpdateRate)
         if (stage == self.stages[1]):
+            self.randomizerStartColor = self.randomizerEndColor
             randRed = random.randint(0, 255)
             randGreen = random.randint(0, 255)
             randBlue = random.randint(0, 255)
@@ -74,42 +96,70 @@ class RandomizingWipe(BasePattern):
         return returnValue
 
     def run(self):
-        for i in range(len(self.triangleNodes)):
-            result = self.triangleNodes[i].mode.run()
+        if (self.patternStage == 0):
+            # this should never happen
+            self.patternStage = 1
+        elif (self.patternStage == 1):
+            self.activeIndex = 0
+            result = self.triangleNodes[self.activeIndex].mode.run()
             if (len(result.ledsChanged) > 0):
-                self.updateStrip(i, result)
+                self.updateStrip(self.activeIndex, result)
             if (result.cycleEnd):
-                if (self.patternStage == 0):
+                changeToWipe = random.randint(1, 10)
+                if (changeToWipe != 1):
+                    self.triangleNodes[self.activeIndex].mode = self.getMode(self.stages[self.patternStage])
+                else:
+                    self.patternStage = 2
+                    self.activeIndex = 1
+                    self.triangleNodes[self.activeIndex].mode = self.getMode(self.stages[self.patternStage])
+        elif (self.patternStage == 2):
+            result = self.triangleNodes[self.activeIndex].mode.run()
+            if (len(result.ledsChanged) > 0):
+                self.updateStrip(self.activeIndex, result)
+            if (result.cycleEnd):
+                self.activeIndex = self.activeIndex + 1
+                if (self.activeIndex < len(self.triangleNodes)):
+                    self.triangleNodes[self.activeIndex].mode = self.getMode(self.stages[self.patternStage])
+                else:
                     self.patternStage = 1
-                if (self.patternStage == 1):
-                    # print('pattern 1, node ' + str(i))
-                    if (i == 0):
-                        changeToWipe = random.randint(1, 15)
-                        if (changeToWipe != 1):
-                            self.randomizerStartColor = self.randomizerEndColor
-                            randRed = random.randint(0, 255)
-                            randGreen = random.randint(0, 255)
-                            randBlue = random.randint(0, 255)
-                            self.randomizerEndColor = Color(randRed, randGreen, randBlue)
-                            self.triangleNodes[0].mode = self.getMode(self.stages[self.patternStage])
-                        else:
-                            self.patternStage = 2
-                            self.wipingIndex = 1
-                            self.triangleNodes[self.wipingIndex].mode = self.getMode(self.stages[self.patternStage])
-                if (self.patternStage == 2):
-                    # print('pattern 2, node ' + str(i))
-                    if (i == self.wipingIndex):
-                        if (self.wipingIndex < len(self.triangleNodes) - 1):
-                            self.wipingIndex = self.wipingIndex + 1
-                            self.triangleNodes[self.wipingIndex].mode = self.getMode(self.stages[self.patternStage])
-                        else:
-                            self.patternStage = 1
-                            self.randomizerStartColor = self.randomizerEndColor
-                            randRed = random.randint(0, 255)
-                            randGreen = random.randint(0, 255)
-                            randBlue = random.randint(0, 255)
-                            self.randomizerEndColor = Color(randRed, randGreen, randBlue)
-                            self.triangleNodes[0].mode = self.getMode(self.stages[self.patternStage])
+                    self.activeIndex = 0
+                    self.triangleNodes[self.activeIndex].mode = self.getMode(self.stages[self.patternStage])
+        # for i in range(len(self.triangleNodes)):
+        #     result = self.triangleNodes[i].mode.run()
+        #     if (len(result.ledsChanged) > 0):
+        #         self.updateStrip(i, result)
+        #     if (result.cycleEnd):
+        #         if (self.patternStage == 0):
+        #             self.patternStage = 1
+        #         if (self.patternStage == 1):
+        #             # print('pattern 1, node ' + str(i))
+        #             if (i == 0):
+        #                 changeToWipe = random.randint(1, 10)
+        #                 if (changeToWipe != 1):
+        #                     self.randomizerStartColor = self.randomizerEndColor
+        #                     randRed = random.randint(0, 255)
+        #                     randGreen = random.randint(0, 255)
+        #                     randBlue = random.randint(0, 255)
+        #                     self.randomizerEndColor = Color(randRed, randGreen, randBlue)
+        #                     self.triangleNodes[0].mode = self.getMode(self.stages[self.patternStage])
+        #                 else:
+        #                     self.patternStage = 2
+        #                     self.wipingIndex = 1
+        #                     self.triangleNodes[self.wipingIndex].mode = self.getMode(self.stages[self.patternStage])
+        #         if (self.patternStage == 2):
+        #             # print('pattern 2, node ' + str(i))
+        #             if (i == self.wipingIndex):
+        #                 if (self.wipingIndex < len(self.triangleNodes) - 1):
+        #                     self.wipingIndex = self.wipingIndex + 1
+        #                     self.triangleNodes[self.wipingIndex].mode = self.getMode(self.stages[self.patternStage])
+        #                 else:
+        #                     self.patternStage = 1
+        #                     self.randomizerStartColor = self.randomizerEndColor
+        #                     randRed = random.randint(0, 255)
+        #                     randGreen = random.randint(0, 255)
+        #                     randBlue = random.randint(0, 255)
+        #                     self.randomizerEndColor = Color(randRed, randGreen, randBlue)
+        #                     self.triangleNodes[0].mode = self.getMode(self.stages[self.patternStage])
 
 # in this pattern:
 # most triangles are background color

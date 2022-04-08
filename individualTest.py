@@ -23,19 +23,19 @@ class IndividualTest(NodeTime):
         # self.triangleNodes[4].mode = triangleAnimations.BreatheLog(color=self.colors[self.colorIndex])
         # self.triangleNodes[5].mode = triangleAnimations.BreatheLog(color=self.color
 
-        # self.triangleNodes[0].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
-        # self.triangleNodes[1].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
-        # self.triangleNodes[2].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
-        # self.triangleNodes[3].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
-        # self.triangleNodes[4].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
-        # self.triangleNodes[5].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[0].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[1].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[2].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[3].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[4].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
+        self.triangleNodes[5].mode = triangleAnimations.Phaser(colorStart=Color(255, 0, 0), colorEnd=Color(0,0,255))
 
-        self.triangleNodes[0].mode = triangleAnimations.Solid()
-        self.triangleNodes[1].mode = triangleAnimations.Solid()
-        self.triangleNodes[2].mode = triangleAnimations.Solid()
-        self.triangleNodes[3].mode = triangleAnimations.Solid()
-        self.triangleNodes[4].mode = triangleAnimations.Solid()
-        self.triangleNodes[5].mode = triangleAnimations.Solid()
+        # self.triangleNodes[0].mode = triangleAnimations.Solid()
+        # self.triangleNodes[1].mode = triangleAnimations.Solid()
+        # self.triangleNodes[2].mode = triangleAnimations.Solid()
+        # self.triangleNodes[3].mode = triangleAnimations.Solid()
+        # self.triangleNodes[4].mode = triangleAnimations.Solid()
+        # self.triangleNodes[5].mode = triangleAnimations.Solid()
         
 
     def getNodes(self):

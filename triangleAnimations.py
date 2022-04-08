@@ -305,17 +305,21 @@ class BreatheLinear(NodeTime):
 
 class Phaser(NodeTime):
 
-    def __init__(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, updateRate = 20, numLeds = 12, update = False):
-        self.init(colorStart, colorEnd, steps, updateRate, numLeds, update)
+    def __init__(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, cooldownSteps = 20, updateRate = 20, numLeds = 12, update = False):
+        self.init(colorStart, colorEnd, steps, cooldownSteps, updateRate, numLeds, update)
 
-    def init(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, updateRate = 20, numLeds = 12, update = False):
+    def init(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, cooldownSteps = 20, updateRate = 20, numLeds = 12, update = False):
         super().__init__(update)
         self.updateRate = updateRate
         self.numLeds = numLeds
 
         self.phaserColorStart = colorStart
         self.phaserColorEnd = colorEnd
-        self.phaserSteps = 50
+        self.phaserSteps = steps
+
+        self.cooldownSteps = cooldownSteps
+        self.cooldownStepIndex = 0
+        self.cooldownStage = 0
 
         self.phaserOffsetR = 0
         self.phaserOffsetG = 0
@@ -328,45 +332,53 @@ class Phaser(NodeTime):
     def run(self):
         returnValue = NodeResult()
         if (self.compareTime(self.updateRate)):
-            newColor = Color(0,0,0)
-            if (self.phaserStepIndex == 0):
-                self.phaserOffsetR = (self.phaserColorStart >> 16) & 0xFF
-                self.phaserOffsetG = (self.phaserColorStart >> 8) & 0xFF
-                self.phaserOffsetB = (self.phaserColorStart >> 0) & 0xFF
-                endR = (self.phaserColorEnd >> 16) & 0xFF
-                endG = (self.phaserColorEnd >> 8) & 0xFF
-                endB = (self.phaserColorEnd >> 0) & 0xFF
-                self.phaserStepR = (endR - self.phaserOffsetR) // self.phaserSteps
-                self.phaserStepG = (endG - self.phaserOffsetG) // self.phaserSteps
-                self.phaserStepB = (endB - self.phaserOffsetB) // self.phaserSteps
-                newColor = self.phaserColorStart
+            if (self.cooldownStage == 1):
+                self.cooldownStepIndex = self.cooldownStepIndex + 1
+                if (self.cooldownStepIndex >= self.phaserSteps):
+                    self.cooldownStepIndex = 0
+                    self.cooldownStage = 0
+                    returnValue.cycleEnd = True
             else:
-                tempR = self.phaserOffsetR + self.phaserStepR*self.phaserStepIndex
-                if (tempR > 255):
-                    tempR = 255
-                if (tempR < 0):
-                    tempR = 0                
-                tempG = self.phaserOffsetG + self.phaserStepG*self.phaserStepIndex
-                if (tempG > 255):
-                    tempG = 255
-                if (tempG < 0):
-                    tempG = 0
-                tempB = self.phaserOffsetB + self.phaserStepB*self.phaserStepIndex
-                if (tempB > 255):
-                    tempB = 255
-                if (tempB < 0):
-                    tempB = 0
-                newColor = Color(tempR, tempG, tempB)
+                newColor = Color(0,0,0)
+                if (self.phaserStepIndex == 0):
+                    self.phaserOffsetR = (self.phaserColorStart >> 16) & 0xFF
+                    self.phaserOffsetG = (self.phaserColorStart >> 8) & 0xFF
+                    self.phaserOffsetB = (self.phaserColorStart >> 0) & 0xFF
+                    endR = (self.phaserColorEnd >> 16) & 0xFF
+                    endG = (self.phaserColorEnd >> 8) & 0xFF
+                    endB = (self.phaserColorEnd >> 0) & 0xFF
+                    self.phaserStepR = (endR - self.phaserOffsetR) // self.phaserSteps
+                    self.phaserStepG = (endG - self.phaserOffsetG) // self.phaserSteps
+                    self.phaserStepB = (endB - self.phaserOffsetB) // self.phaserSteps
+                    newColor = self.phaserColorStart
+                else:
+                    tempR = self.phaserOffsetR + self.phaserStepR*self.phaserStepIndex
+                    if (tempR > 255):
+                        tempR = 255
+                    if (tempR < 0):
+                        tempR = 0                
+                    tempG = self.phaserOffsetG + self.phaserStepG*self.phaserStepIndex
+                    if (tempG > 255):
+                        tempG = 255
+                    if (tempG < 0):
+                        tempG = 0
+                    tempB = self.phaserOffsetB + self.phaserStepB*self.phaserStepIndex
+                    if (tempB > 255):
+                        tempB = 255
+                    if (tempB < 0):
+                        tempB = 0
+                    newColor = Color(tempR, tempG, tempB)
 
-            # newColor = ColorLinearToLog(newColor)
+                # newColor = ColorLinearToLog(newColor)
 
-            self.phaserStepIndex = self.phaserStepIndex + 1
-            if (self.phaserStepIndex >= self.phaserSteps):
-                self.phaserStepIndex = 0
-                returnValue.cycleEnd = True
-            
-            for i in range(self.numLeds):
-                returnValue.ledsChanged[i] = newColor
+                self.phaserStepIndex = self.phaserStepIndex + 1
+                if (self.phaserStepIndex >= self.phaserSteps):
+                    self.phaserStepIndex = 0
+                    # returnValue.cycleEnd = True
+                    self.cooldownStage = 1
+                
+                for i in range(self.numLeds):
+                    returnValue.ledsChanged[i] = newColor
                 
         return returnValue
 

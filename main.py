@@ -28,7 +28,8 @@ def main():
         myTimer = NodeTime(True)
 
         # individual testing
-        myPattern = individualTest.IndividualTest()
+        # myPattern = individualTest.IndividualTest()
+        myPattern = patternAnimations.Testing()
         while True:
            myPattern.run()
 
@@ -56,8 +57,8 @@ def main():
         colorBackground = Color(255//divisorBackground, 0, 0)
         colorSpecial = Color(0, 0, 255//divisorSpecial)
         # myPattern = patternAnimations.MjlShow(colorBackground = colorBackground, colorSpecial = colorSpecial)
-        myPattern = patternAnimations.RandomTemporarySwitcher(colorBackground = colorBackground, colorSpecial = colorSpecial)
-        # myPattern = patternAnimations.RandomizingWipe(colorStart = colorBackground)
+        # myPattern = patternAnimations.RandomTemporarySwitcher(colorBackground = colorBackground, colorSpecial = colorSpecial)
+        myPattern = patternAnimations.RandomizingWipe(colorStart = colorBackground)
 
         while True:
             myPattern.run()
