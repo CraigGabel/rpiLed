@@ -15,7 +15,7 @@ So, I
 
 ...and this is what it looks like: https://imgur.com/a/9SlSPfc
 
-The code in the rpi_ws281x/ directory I found online and used in my project.  I don't recall exactly where the files came from, but they are untouched and their comments cite authorship.
+The code in the rpi_ws281x/ directory I found online and used in my project.  I don't recall exactly where the files came from, but they are untouched and their comments cite authorship.  Everything else I wrote.
 
 # setup
 
