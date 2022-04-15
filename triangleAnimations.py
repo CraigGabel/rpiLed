@@ -1,5 +1,6 @@
 from nodeResult import NodeResult
 from nodeTime import NodeTime
+from baseTriangleAnimation import BaseTriangleAnimation
 from rpi_ws281x import *
 import random
 
@@ -404,23 +405,90 @@ class Randy(NodeTime):
                 
         return returnValuey
 
-class Temp(NodeTime):
+class Temp(BaseTriangleAnimation):
 
-    def __init__(self, color = Color(255, 0, 0), updateRate = 500, numLeds = 12, update = False):
-        self.init(color, updateRate, numLeds)
+    def __init__(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, cooldownSteps = 20, updateRate = 20, update = False):
+        self.init(colorStart, colorEnd, steps, cooldownSteps, updateRate, update)
 
-    def init(self, color = Color(255, 0, 0), updateRate = 500, numLeds = 12, update = False):
-        super().__init__(update)
+    def init(self, colorStart = Color(255, 0, 0), colorEnd = Color(0, 0, 255), steps = 50, cooldownSteps = 20, updateRate = 20, update = False):
+        super().__init__(update = update)
         self.updateRate = updateRate
-        self.numLeds = numLeds
 
-        self.solidColor = ColorLinearToLog(color)
+        self.phaserColorStart = colorStart
+        self.phaserColorEnd = colorEnd
+        self.phaserSteps = steps
+
+        self.cooldownSteps = cooldownSteps
+        self.cooldownStepIndex = 0
+        self.cooldownStage = 0
+
+        self.phaserOffsetR = 0
+        self.phaserOffsetG = 0
+        self.phaserOffsetB = 0
+        self.phaserStepR = 0
+        self.phaserStepG = 0
+        self.phaserStepB = 0
+        self.phaserStepIndex = 0
+
+        print(str(self.getNumLeds()))
+        print('wtf')
 
     def run(self):
         returnValue = NodeResult()
         if (self.compareTime(self.updateRate)):
-            for i in range(self.numLeds):
-                returnValue.ledsChanged[i] = self.solidColor
-            returnValue.cycleEnd = True
+            if (self.isCooldownActive() == 1):
+                result = self.cooldownRun()
+                if (result == 1):
+                    returnValue.cycleEnd = True
+
+                # print('cooldown')
+                # self.cooldownStepIndex = self.cooldownStepIndex + 1
+                # if (self.cooldownStepIndex >= self.cooldownSteps):
+                #     self.cooldownStepIndex = 0
+                #     self.cooldownStage = 0
+                #     returnValue.cycleEnd = True
+            else:
+                print('normal')
+                newColor = Color(0,0,0)
+                if (self.phaserStepIndex == 0):
+                    self.phaserOffsetR = (self.phaserColorStart >> 16) & 0xFF
+                    self.phaserOffsetG = (self.phaserColorStart >> 8) & 0xFF
+                    self.phaserOffsetB = (self.phaserColorStart >> 0) & 0xFF
+                    endR = (self.phaserColorEnd >> 16) & 0xFF
+                    endG = (self.phaserColorEnd >> 8) & 0xFF
+                    endB = (self.phaserColorEnd >> 0) & 0xFF
+                    self.phaserStepR = (endR - self.phaserOffsetR) // self.phaserSteps
+                    self.phaserStepG = (endG - self.phaserOffsetG) // self.phaserSteps
+                    self.phaserStepB = (endB - self.phaserOffsetB) // self.phaserSteps
+                    newColor = self.phaserColorStart
+                else:
+                    tempR = self.phaserOffsetR + self.phaserStepR*self.phaserStepIndex
+                    if (tempR > 255):
+                        tempR = 255
+                    if (tempR < 0):
+                        tempR = 0                
+                    tempG = self.phaserOffsetG + self.phaserStepG*self.phaserStepIndex
+                    if (tempG > 255):
+                        tempG = 255
+                    if (tempG < 0):
+                        tempG = 0
+                    tempB = self.phaserOffsetB + self.phaserStepB*self.phaserStepIndex
+                    if (tempB > 255):
+                        tempB = 255
+                    if (tempB < 0):
+                        tempB = 0
+                    newColor = Color(tempR, tempG, tempB)
+
+                # newColor = ColorLinearToLog(newColor)
+
+                self.phaserStepIndex = self.phaserStepIndex + 1
+                if (self.phaserStepIndex >= self.phaserSteps):
+                    self.phaserStepIndex = 0
+                    # returnValue.cycleEnd = True
+                    self.startCooldown()
+                
+                for i in range(self.getNumLeds()):
+                    returnValue.ledsChanged[i] = newColor
+                
         return returnValue
         
