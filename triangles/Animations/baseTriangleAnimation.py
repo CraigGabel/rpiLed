@@ -1,5 +1,6 @@
 # a single triangleNode is able to run simple patterns (triangleAnimations) among its 12 leds
 # this base pattern is to be extended by all triangleAnimations
+#   TODO: in process is updating existing triangleAnimations to fulfill the extension of this class
 # it contains helper functions all triangleAnimations will need
 
 from triangles.Node.nodeTime import NodeTime

@@ -6,13 +6,10 @@
 #   methods to paint new colors to strip (calls to which by extending class) and clear (turn off) leds
 
 
-from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
-from triangles.Node.nodeTime import NodeTime
 from triangles.Node.triangleNode import *
 from rpi_ws281x import *
-import random
-import triangles.Animations.triangleAnimations as triangleAnimations
 import stripConfig as stripConfig
+
 
 class BasePattern(NodeTime):
     def __init__(self, strip = None, update = False):

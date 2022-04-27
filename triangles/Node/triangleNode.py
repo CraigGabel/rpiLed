@@ -1,9 +1,6 @@
 # these are the actual "triangles"
 
-from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
 from triangles.Node.nodeTime import NodeTime
-from rpi_ws281x import *
-import random
 
 class TriangleNode(NodeTime):
     NUM_LEDS = 12

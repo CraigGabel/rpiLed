@@ -7,12 +7,10 @@
 
 from patterns.basePattern import BasePattern
 from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
-from triangles.Node.nodeTime import NodeTime
 from triangles.Node.triangleNode import *
-from rpi_ws281x import *
+from rpi_ws281x import Color
 import random
 import triangles.Animations.triangleAnimations as triangleAnimations
-import stripConfig as stripConfig
 
 # i am a template, do not instantiate me
 # copy/paste me to create new patterns
