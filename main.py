@@ -3,15 +3,9 @@
 
 
 
-import time
-from triangles.Node.nodeTime import *
-from triangles.Animations.triangleAnimationResult import *
 import patterns.patternAnimations as patternAnimations
-from rpi_ws281x import *
-from triangles.Node.triangleNode import *
-import stripConfig as stripConfig
+from rpi_ws281x import Color
 import argparse
-import triangles.Animations.triangleAnimations as triangleAnimations
 
 def argParser():
     parser = argparse.ArgumentParser()
@@ -80,7 +74,9 @@ def doRandomizingWipe():
             myPattern.clear()
 
 def main():
-    # just pick here which pattern to run
+    # just pick here which pattern to run, you can only do one
+
+    # doIndividualTesting()
     # doRandomizingWipe()
     doRandomTemporarySwitcher()
 
