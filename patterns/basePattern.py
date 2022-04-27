@@ -6,7 +6,7 @@
 #   methods to paint new colors to strip (calls to which by extending class) and clear (turn off) leds
 
 
-from triangles.Animations.animationResult import AnimationResult
+from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
 from triangles.Node.nodeTime import NodeTime
 from triangles.Node.triangleNode import *
 from rpi_ws281x import *
@@ -20,7 +20,7 @@ class BasePattern(NodeTime):
 
         (self.triangleNodes, ledCount) = self.getNodes()
         if (strip == None):
-            self.strip = stripConfig.init(ledCount)     # this is one of the very few places my code interacts with rpi_ws281x/, and anywhere a pattern file references "strip"
+            self.strip = stripConfig.init(ledCount)     # this is one of the very few places my code interacts with rpi_ws281x/
         else:
             self.strip = strip
     

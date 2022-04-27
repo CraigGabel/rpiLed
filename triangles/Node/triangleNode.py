@@ -1,6 +1,6 @@
 # these are the actual "triangles"
 
-from triangles.Animations.animationResult import AnimationResult
+from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
 from triangles.Node.nodeTime import NodeTime
 from rpi_ws281x import *
 import random

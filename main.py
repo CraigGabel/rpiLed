@@ -5,7 +5,7 @@
 
 import time
 from triangles.Node.nodeTime import *
-from triangles.Animations.animationResult import *
+from triangles.Animations.triangleAnimationResult import *
 import patterns.patternAnimations as patternAnimations
 from rpi_ws281x import *
 from triangles.Node.triangleNode import *

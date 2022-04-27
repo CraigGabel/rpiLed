@@ -2,7 +2,7 @@
 # these are those animations
 
 
-from triangles.Animations.animationResult import AnimationResult
+from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
 from triangles.Node.nodeTime import NodeTime
 from triangles.Animations.baseTriangleAnimation import BaseTriangleAnimation
 from rpi_ws281x import *
@@ -79,7 +79,7 @@ class Solid(NodeTime):
         self.numLeds = numLeds
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             for i in range(self.numLeds):
                 returnValue.ledsChanged[i] = self.solidColor
@@ -103,7 +103,7 @@ class SingleCircle(NodeTime):
         self.singleCircleLedIndex = self.singleCircleStartIndex
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             thisIndex = self.numLeds - 1 - self.singleCircleLedIndex if self.isBackwards else self.singleCircleLedIndex
             returnValue.ledsChanged[thisIndex] = self.singleCircleColor
@@ -137,7 +137,7 @@ class TripleCircle(NodeTime):
         self.tripleCircleColorIndex = 0
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             index0 = self.numLeds - 1 - self.tripleCircleLedIndex if self.isBackwards else self.tripleCircleLedIndex
             index1 = (index0 + (1*self.numLeds//3)) % (self.numLeds)
@@ -171,7 +171,7 @@ class Wipe(NodeTime):
         self.wipeLedIndex = self.numLeds//3 if (self.isBackwards) else 0
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             startIndex0 = 0 + self.wipeStartCorner*self.numLeds//3
             startIndex1 = (startIndex0 if (startIndex0 != 0) else self.numLeds) - 1
@@ -214,7 +214,7 @@ class Breathe(NodeTime):
         self.breatheAdjustment = 1
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             tempR = (self.breatheColor >> 16) & 255
             tempG = (self.breatheColor >> 8) & 255
@@ -251,7 +251,7 @@ class BreatheLog(NodeTime):
         self.breatheAdjustment = 1
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             tempR = (self.breatheColor >> 16) & 255
             tempG = (self.breatheColor >> 8) & 255
@@ -288,7 +288,7 @@ class BreatheLinear(NodeTime):
         self.breatheAdjustment = 1
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             tempR = (self.breatheColor >> 16) & 255
             tempG = (self.breatheColor >> 8) & 255
@@ -335,7 +335,7 @@ class Phaser(NodeTime):
         self.phaserStepIndex = 0
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             if (self.cooldownStage == 1):
                 self.cooldownStepIndex = self.cooldownStepIndex + 1
@@ -398,7 +398,7 @@ class Randy(NodeTime):
         self.numLeds = numLeds
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             tempR = random.randint(0, 255)
             tempG = random.randint(0, 255)
@@ -438,7 +438,7 @@ class Temp(BaseTriangleAnimation):
         print('wtf')
 
     def run(self):
-        returnValue = AnimationResult()
+        returnValue = TriangleAnimationResult()
         if (self.compareTime(self.updateRate)):
             if (self.isCooldownActive() == 1):
                 result = self.cooldownRun()

@@ -6,7 +6,7 @@
 
 
 from patterns.basePattern import BasePattern
-from triangles.Animations.animationResult import AnimationResult
+from triangles.Animations.triangleAnimationResult import TriangleAnimationResult
 from triangles.Node.nodeTime import NodeTime
 from triangles.Node.triangleNode import *
 from rpi_ws281x import *
