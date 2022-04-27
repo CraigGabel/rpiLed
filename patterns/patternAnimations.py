@@ -1,14 +1,18 @@
-from basePattern import BasePattern
-from nodeResult import NodeResult
-from nodeTime import NodeTime
-from triangleNode import *
+# nothing exists outside of these classes
+# multiple triangleNodes exist as properties within these classes
+# these triangleNodes use triangleAnimations that are controlled by these class to paint patterns where multiple triangles act in concet
+# ...there is still much work to do...
+
+
+
+from patterns.basePattern import BasePattern
+from triangles.Animations.animationResult import AnimationResult
+from triangles.Node.nodeTime import NodeTime
+from triangles.Node.triangleNode import *
 from rpi_ws281x import *
 import random
-import triangleAnimations
+import triangles.Animations.triangleAnimations as triangleAnimations
 import stripConfig as stripConfig
-
-# find patterns that groupings of triangleNodes will show
-# these are attempts to cause groups of triangleNodes to act in concert
 
 # i am a template, do not instantiate me
 # copy/paste me to create new patterns

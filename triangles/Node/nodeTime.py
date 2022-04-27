@@ -1,7 +1,7 @@
-import time
-
 # a simple class to allow time comparisons
-# calls to compareTime return true if _difference_ time has passed since the last time compareTime returned true
+# all triangleNodes must extend this class
+
+import time
 
 class NodeTime:
     def __init__(self, update=False):

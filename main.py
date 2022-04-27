@@ -1,14 +1,17 @@
+# main doesnt do much right now
+# just hard coding a selection of one of a couple patternAnimations to run
+
+
+
 import time
-import individualTest
-from nodeTime import *
-from nodeResult import *
-import patternAnimations
+from triangles.Node.nodeTime import *
+from triangles.Animations.animationResult import *
+import patterns.patternAnimations as patternAnimations
 from rpi_ws281x import *
-from triangleNode import *
-from ledAnimations import *
+from triangles.Node.triangleNode import *
 import stripConfig as stripConfig
 import argparse
-import triangleAnimations
+import triangles.Animations.triangleAnimations as triangleAnimations
 
 def argParser():
     parser = argparse.ArgumentParser()
@@ -40,8 +43,8 @@ def doRandomTemporarySwitcher():
 
     try:
         # divisors are so the lights dont saturate webcams, tune for your conditions
-        divisorBackground = 50
-        divisorSpecial = 50
+        divisorBackground = 20
+        divisorSpecial = 20
 
         colorBackground = Color(255//divisorBackground, 0, 0)
         colorSpecial = Color(0, 0, 255//divisorSpecial)
@@ -78,6 +81,7 @@ def doRandomizingWipe():
 
 def main():
     # just pick here which pattern to run
-    doRandomizingWipe()
+    # doRandomizingWipe()
+    doRandomTemporarySwitcher()
 
 main()

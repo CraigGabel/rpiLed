@@ -1,7 +1,12 @@
+# you must consider these leds are really just (electronically) a single strip of leds
+# and that is how we "address" them
+# sure, they come in groups of 12 leds...but they are all 1 led strip
+
+
+
 from rpi_ws281x import *
 
 # LED strip configuration:
-LED_COUNT      = 24      # Number of LED pixels.
 LED_PIN        = 18      # GPIO pin connected to the pixels (18 uses PWM!).
 #LED_PIN        = 10      # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
 LED_FREQ_HZ    = 800000  # LED signal frequency in hertz (usually 800khz)

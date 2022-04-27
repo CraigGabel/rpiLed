@@ -1,4 +1,8 @@
-from nodeTime import NodeTime
+# a single triangleNode is able to run simple patterns (triangleAnimations) among its 12 leds
+# this base pattern is to be extended by all triangleAnimations
+# it contains helper functions all triangleAnimations will need
+
+from triangles.Node.nodeTime import NodeTime
 
 class BaseTriangleAnimation(NodeTime):
     def __init__(self, update = False, numLeds = 12, cooldownSteps = 50, cooldownRate = 20):
