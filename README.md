@@ -13,7 +13,11 @@ So, I
   - need a beefy power supply if I ever want to run lots of these https://www.amazon.com/gp/product/B06XK2DDW4/ref=ppx_yo_dt_b_asin_title_o02_s01?ie=UTF8&psc=1 (if the link dies it is a 20A 5V power supply)
   - wrote a bunch of python code (found in this repo) to control the leds
 
-...and this is what it looks like: https://imgur.com/a/9SlSPfc
+...and this is what it looks like:
+![qapa6JU](https://user-images.githubusercontent.com/28834331/168857862-4777be3f-f134-44e3-944e-e714bc9a099c.jpeg)
+![lRoUSmw](https://user-images.githubusercontent.com/28834331/168857881-5cd15baa-9221-4b2e-a948-087c7185743d.jpeg)
+![GtuW6bU](https://user-images.githubusercontent.com/28834331/168857901-3b307cda-8179-4a67-9b2d-99ec2fd9c9a3.jpeg)
+![Z7mXNbk](https://user-images.githubusercontent.com/28834331/168857920-7c7fbf42-dbbb-4765-a868-170a0c9c5b17.jpeg)
 
 The code in the rpi_ws281x/ directory I found online and used in my project.  I don't recall exactly where the files came from, but they are untouched and their comments cite authorship.  Everything else I wrote.
 
